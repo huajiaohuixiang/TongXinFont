@@ -1,0 +1,94 @@
+apply plugin: 'com.android.application'
+
+def configInfo = rootProject.ext.android
+def library = rootProject.ext.dependencies
+
+android {
+    signingConfigs {
+        demo {
+        }
+    }
+    compileSdkVersion configInfo.compileSdkVersion
+
+    defaultConfig {
+        applicationId "me.cl.lingxi"
+        minSdkVersion configInfo.minSdkVersion
+        targetSdkVersion configInfo.targetSdkVersion
+        versionCode 199
+        versionName "1.2.6"
+
+        vectorDrawables.useSupportLibrary = true
+        flavorDimensions "versionCode"
+    }
+
+    // https://developer.android.google.cn/topic/libraries/view-binding
+    buildFeatures {
+        viewBinding = true
+    }
+
+    productFlavors {
+        alpha {
+            applicationId "me.cl.lingxi.alpha"
+            manifestPlaceholders = [
+                    'APP_ID'  : "me.cl.lingxi.alpha",
+                    'APP_NAME': "@string/app_name_alpha"
+            ]
+        }
+        local {
+            applicationId "me.cl.lingxi.local"
+            manifestPlaceholders = [
+                    'APP_ID'  : "me.cl.lingxi.local",
+                    'APP_NAME': "@string/app_name_local"
+            ]
+        }
+        online {
+            applicationId "me.cl.lingxi"
+            manifestPlaceholders = [
+                    'APP_ID'  : "me.cl.lingxi",
+                    'APP_NAME': "@string/app_name"
+            ]
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+        disable 'GoogleAppIndexingWarning'
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation library.material
+    implementation library.androidxAppcompat
+    implementation library.androidxActivity
+    implementation library.androidxFragment
+    implementation library.androidxRecyclerview
+    //解决Glide找不到Android声明库问题
+    //annotationProcessor library.androidxAnnotation
+    implementation library.androidxConstraintlayout
+    implementation library.okhttp
+    implementation library.gson
+    implementation library.glide
+    implementation library.glideOkhttp
+    annotationProcessor library.glideCompiler
+    implementation library.glideTransformations
+    implementation library.compressor
+    implementation project(':library')
+    implementation project(':PhotoPicker')
+	
+	//权限申请
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
+	implementation 'com.github.tbruyelle:rxpermissions:0.12'
+}

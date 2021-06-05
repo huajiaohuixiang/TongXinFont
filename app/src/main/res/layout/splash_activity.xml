@@ -1,0 +1,16 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".module.splash.SplashActivity" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="32dp"
+        android:contentDescription="@string/app_name_alpha"
+        android:padding="24dp"
+        android:src="@drawable/img_start_bg" />
+
+</RelativeLayout>
