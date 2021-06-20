@@ -33,6 +33,7 @@ allprojects {
     }
 }
 
+
 ext {
     android = [
             compileSdkVersion: 28,
@@ -55,6 +56,7 @@ ext {
             glideCompiler           : 'com.github.bumptech.glide:compiler:4.1.1',
             glideTransformations    : 'jp.wasabeef:glide-transformations:3.0.1',
             compressor              : 'id.zelory:compressor:2.1.1',
+            ossAndroidSdk           : 'com.aliyun.dpa:oss-android-sdk:+'
     ]
 }
 

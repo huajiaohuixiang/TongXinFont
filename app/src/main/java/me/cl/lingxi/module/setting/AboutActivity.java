@@ -57,14 +57,10 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
                 .build();
 
 
-        int x = (int) (Math.random() * 3) + 1;
-        if (x == 1) {
-            MoeToast.makeText(this, R.string.egg_hidden_secrets);
-        }
+
 
         String versionName = "V " + Utils.getAppVersionName(this);
         mVersion.setText(versionName);
-
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -75,7 +71,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
                 getAppVersion();
                 break;
             case R.id.feedback:
-                boolean isWpa = Utils.wpaQQ(this, "986417980");
+                boolean isWpa = Utils.wpaQQ(this, "1751415583");
                 if (!isWpa) {
                     showToast("未安装手Q或安装的版本不支持");
                 }
@@ -91,19 +87,19 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
 
     // 获取版本信息
     public void getAppVersion() {
-        OkUtil.post()
+        OkUtil.get()
                 .url(Api.latestVersion)
-                .execute(new ResultCallback<Result<AppVersion>>() {
+                .execute(new ResultCallback<Result<String>>() {
                     @Override
-                    public void onSuccess(Result<AppVersion> response) {
+                    public void onSuccess(Result<String> response) {
                         String code = response.getCode();
-                        AppVersion data = response.getData();
+                        String data=response.getData();
                         if (ResultConstant.CODE_SUCCESS.equals(code) && data != null) {
                             int versionCode = Utils.getAppVersionCode(AboutActivity.this);
-                            if (versionCode >= data.getVersionCode()) {
+                            if (versionCode >= Integer.valueOf(data)) {
                                 showToast( "已是最新版");
                             } else {
-                                showUpdate(data);
+                                showUpdate();
                             }
                         } else {
                             showToast("版本信息获取失败");
@@ -124,17 +120,14 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
     }
 
     // 展示更新弹窗
-    private void showUpdate(final AppVersion appVersion) {
+    private void showUpdate() {
         AlertDialog.Builder mDialog = new AlertDialog.Builder(this);
         mDialog.setTitle("发现新版本");
-        mDialog.setMessage(appVersion.getUpdateInfo());
-        if (appVersion.getUpdateFlag() != 2) {
-            mDialog.setNegativeButton("取消", null);
-        }
+
         mDialog.setPositiveButton("更新", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                gotoDownload(appVersion.getApkUrl());
+                gotoDownload(Api.latestApp);
             }
         }).setCancelable(false).create().show();
     }

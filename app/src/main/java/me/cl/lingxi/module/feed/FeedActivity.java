@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import me.cl.library.base.BaseActivity;
 import me.cl.library.photo.PhotoBrowser;
@@ -45,13 +46,13 @@ import me.cl.lingxi.databinding.FeedInfoIncludeBinding;
 import me.cl.lingxi.databinding.FeedLikeIncludeBinding;
 import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.Feed;
-import me.cl.lingxi.entity.Like;
 import me.cl.lingxi.entity.PageInfo;
 import me.cl.lingxi.entity.Reply;
-import me.cl.lingxi.entity.User;
 import me.cl.lingxi.module.member.UserActivity;
 import okhttp3.Call;
 
+
+//点击某个动态的动态详情页面
 public class FeedActivity extends BaseActivity implements View.OnClickListener {
 
     private FeedActivityBinding mActivityBinding;
@@ -145,13 +146,14 @@ public class FeedActivity extends BaseActivity implements View.OnClickListener {
             public void onItemClick(View view, Comment comment) {
                 switch (view.getId()) {
                     case R.id.user_img:
-                        gotoUser(comment.getUser());
+                        //comment加上avatar
+                        gotoUser("");
                         break;
                     case R.id.evaluate_body:
                         MSG_MODE = MSG_REPLY;
-                        mCommentId = String.valueOf(comment.getId());
-                        toUid = comment.getUser().getId();
-                        mEditTuCao.setHint("回复：" + comment.getUser().getUsername());
+                        mCommentId = String.valueOf(comment.get_id());
+                        toUid = comment.getUsername();
+                        mEditTuCao.setHint("回复：" + comment.getUsername());
                         openSofInput(mEditTuCao);
                         mEditMask.setVisibility(View.VISIBLE);
                         break;
@@ -182,26 +184,26 @@ public class FeedActivity extends BaseActivity implements View.OnClickListener {
         toUid = feed.getUsername();
 
         // 动态详情
-        //ContentUtil.loadUserAvatar(mUserImg, user.getAvatar());
-        mFeedInfoBinding.userName.setText(feed.getNickname());
+        ContentUtil.loadUserAvatar(mUserImg, feed.getAvatar());
+        mFeedInfoBinding.userNickname.setText(feed.getNickname());
         mFeedInfoBinding.feedTime.setText(feed.getCreateTime());
         AppCompatTextView feedInfo = mFeedInfoBinding.feedInfo;
         feedInfo.setText(FeedContentUtil.getFeedText(feed.getContent(), feedInfo));
         // 查看评论点赞数
-        mFeedActionBinding.feedViewNum.setText(String.valueOf(0));
+        mFeedActionBinding.feedViewNum.setText(String.valueOf(feed.getViews()));
         mFeedCommentNum.setText(String.valueOf(feed.getComments()));
         // 是否已经点赞
-        mFeedActionBinding.feedLikeIcon.setSelected(false);
+        mFeedActionBinding.feedLikeIcon.setSelected(feed.isLike());
         mFeedActionBinding.feedLikeLayout.setClickable(false);
         // 点赞列表
-//        List<Like> likeList = feed.getLikeList();
-//        TextView likePeople = mFeedLikeBinding.likePeople;
-//        LinearLayout likeWindow = mFeedLikeBinding.likeWindow;
-//        TextView feedLikeNum = mFeedActionBinding.feedLikeNum;
-//        ContentUtil.setLikePeopleAll(likePeople, feedLikeNum, likeWindow, likeList);
+        List<String> likeList = feed.getLikesList();
+        TextView likePeople = mFeedLikeBinding.likePeople;
+        LinearLayout likeWindow = mFeedLikeBinding.likeWindow;
+        TextView feedLikeNum = mFeedActionBinding.feedLikeNum;
+        ContentUtil.setLikePeopleAll(likePeople, feedLikeNum, likeWindow, likeList);
 
         // 图片
-       final List<String> photos = feed.getPhotoList();
+       final List<String> photos = feed.getPhotoesList();
         if (photos != null && photos.size() > 0) {
             mPhotoRecyclerView.setVisibility(View.VISIBLE);
             int size = photos.size();
@@ -227,14 +229,15 @@ public class FeedActivity extends BaseActivity implements View.OnClickListener {
             mPhotoRecyclerView.setVisibility(View.GONE);
         }
 
-        //postViewFeed();
+        postViewFeed();
         getEvaluateList(feed.getId());
     }
 
     private void postViewFeed() {
         OkUtil.post()
                 .url(Api.viewFeed)
-                .addParam("id", mFeedId)
+                .addParam("postId", mFeedId)
+                .addParam("username",saveId)
                 .execute();
     }
 
@@ -246,7 +249,7 @@ public class FeedActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_img:
-                gotoUser(feed.getUser());
+                gotoUser(feed.getUsername());
                 break;
             case R.id.feed_like_layout:
                 showToast("点赞");
@@ -270,7 +273,7 @@ public class FeedActivity extends BaseActivity implements View.OnClickListener {
                     case MSG_EVALUATE:
                         //评论
                         setLoading("评论中...");
-                        addEvaluate(mFeedId, saveId, toUid, msg);
+                        addEvaluate(mFeedId, saveId, feed.getUsername(), msg);
                         mEditTuCao.setText(null);
                         hideSoftInput(mEditTuCao);
                         break;
@@ -293,19 +296,23 @@ public class FeedActivity extends BaseActivity implements View.OnClickListener {
         Log.d(getClass().getName(), feedId + "," + uid + "," + toUid + "," + comment);
         OkUtil.post()
                 .url(Api.saveComment)
-                .addParam("feedId", feedId)
-                .addParam("userId", uid)
-                .addParam("toUserId", toUid)
+                .addParam("postId", feedId)
+                .addParam("username", uid)
                 .addParam("commentInfo", comment)
-                .addParam("type", "0")
-                .execute(new ResultCallback<Result>() {
+                .execute(new ResultCallback<Result<String>>() {
                     @Override
-                    public void onSuccess(Result response) {
-                        showToast("评论成功");
-                        mFeedCommentNum.setText(String.valueOf(Integer.parseInt(mFeedCommentNum.getText().toString()) + 1));
+                    public void onSuccess(Result<String> response) {
+                        String code = response.getCode();
+                        if (!"00000".equals(code)) {
+                            showToast("评论失败");
+                            return;
+                        }
 
+                        mFeedCommentNum.setText(String.valueOf(Integer.parseInt(mFeedCommentNum.getText().toString()) + 1));
                         getEvaluateList(mFeedId);
+                        showToast("评论成功");
                     }
+
 
                     @Override
                     public void onError(Call call, Exception e) {
@@ -367,10 +374,10 @@ public class FeedActivity extends BaseActivity implements View.OnClickListener {
     /**
      * 前往用户界面
      */
-    private void gotoUser(User user) {
+    private void gotoUser(String useravatar) {
         Intent intent = new Intent(this, UserActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(Constants.PASSED_USER_INFO, user);
+        bundle.putSerializable(Constants.PASSED_USER_INFO, useravatar);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -394,6 +401,8 @@ public class FeedActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void setData(List<Comment> data) {
+
+
         mAdapter.setDate(data);
     }
 

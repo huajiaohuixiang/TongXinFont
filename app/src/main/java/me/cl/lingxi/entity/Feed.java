@@ -9,23 +9,27 @@ public class Feed implements Serializable {
     private String id;
     private String username;
     private String nickname;
+    private String avatar;
     private String content;
-    private String likes;
-    private String comments;
+
+
     // 用户信息
-    private User user;
-    private String feedInfo;
-    private Integer viewNum;
+    //private User user;
+    //private String feedInfo;
+    private Integer views;
     // 评论数
-    private Integer commentNum;
+    private Integer comments;
     // 当前用户是否点赞
     private boolean like;
+    //点赞数
+    private Integer likes;
     // 点赞列表
-    private List<Like> likeList;
+    private List<String> likesList;
     // 相册
-    private List<String> photoList;
-    private String createTime;
-    private String updateTime;
+    private List<String> photoesList;
+    private String createdTime;
+    private String updatedTime;
+
 
     public String getId() {
         return id;
@@ -34,37 +38,37 @@ public class Feed implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+//
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
+//
+//    public String getFeedInfo() {
+//        return feedInfo;
+//    }
+//
+//    public void setFeedInfo(String feedInfo) {
+//        this.feedInfo = feedInfo;
+//    }
 
-    public User getUser() {
-        return user;
+    public Integer getViews() {
+        return views;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getFeedInfo() {
-        return feedInfo;
-    }
-
-    public void setFeedInfo(String feedInfo) {
-        this.feedInfo = feedInfo;
-    }
-
-    public Integer getViewNum() {
-        return viewNum;
-    }
-
-    public void setViewNum(Integer viewNum) {
-        this.viewNum = viewNum;
+    public void setViews(Integer views) {
+        this.views = views;
     }
 
     public Integer getCommentNum() {
-        return commentNum;
+        return comments;
     }
 
     public void setCommentNum(Integer commentNum) {
-        this.commentNum = commentNum;
+        this.comments = commentNum;
     }
 
     public boolean isLike() {
@@ -75,51 +79,51 @@ public class Feed implements Serializable {
         this.like = like;
     }
 
-    public List<Like> getLikeList() {
-        return likeList;
+    public List<String> getLikesList() {
+        return likesList;
     }
 
-    public void setLikeList(List<Like> likeList) {
-        this.likeList = likeList;
+    public void setLikesList(List<String> likesList) {
+        this.likesList = likesList;
     }
 
-    public List<String> getPhotoList() {
-        return photoList;
+    public List<String> getPhotoesList() {
+        return photoesList;
     }
 
-    public void setPhotoList(List<String> photoList) {
-        this.photoList = photoList;
+    public void setPhotoesList(List<String> photoesList) {
+        this.photoesList = photoesList;
     }
 
     public String getCreateTime() {
-        return createTime;
+        return createdTime;
     }
 
     public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+        this.createdTime = createTime;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
+    public String getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     @Override
     public String toString() {
         return "Feed{" +
                 "id='" + id + '\'' +
-                ", user=" + user +
-                ", feedInfo='" + feedInfo + '\'' +
-                ", viewNum=" + viewNum +
-                ", commentNum=" + commentNum +
+                ", user=" + username +
+                ", content='" + content + '\'' +
+                ", viewNum=" + views +
+                ", commentNum=" + comments +
                 ", like=" + like +
-                ", likeList=" + likeList +
-                ", photoList=" + photoList +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
+                ", likeList=" + likesList +
+                ", photoList=" + photoesList +
+                ", createTime=" + createdTime +
+                ", updateTime=" + updatedTime +
                 '}';
     }
 
@@ -147,19 +151,27 @@ public class Feed implements Serializable {
         this.content = content;
     }
 
-    public String getLikes() {
+    public Integer getLikes() {
         return likes;
     }
 
-    public void setLikes(String likes) {
+    public void setLikes(Integer likes) {
         this.likes = likes;
     }
 
-    public String getComments() {
+    public Integer getComments() {
         return comments;
     }
 
-    public void setComments(String comments) {
+    public void setComments(Integer comments) {
         this.comments = comments;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

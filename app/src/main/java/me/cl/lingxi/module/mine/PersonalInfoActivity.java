@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import me.cl.library.base.BaseActivity;
@@ -48,7 +49,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
     private Toolbar mToolbar;
     private ImageView mPersonImg;
     private TextView mPersonName;
-    private TextView mUserSignature;
+    private TextView mUserStuId;
 
     private String mUserId;
     private String saveName;
@@ -78,7 +79,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
         mToolbar = mActivityBinding.includeToolbar.toolbar;
         mPersonImg = mActivityBinding.personImg;
         mPersonName = mActivityBinding.personName;
-        mUserSignature = mActivityBinding.userSignature;
+        mUserStuId = mActivityBinding.userSignature;
 
         mPersonImg.setOnClickListener(this);
         mPersonName.setOnClickListener(this);
@@ -115,14 +116,14 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
                         .start(PersonalInfoActivity.this, PhotoPicker.REQUEST_CODE);
                 break;
             case R.id.person_name:
-                EditTextDialog editTextDialog = EditTextDialog.newInstance("修改用户名", saveName, 24);
+                EditTextDialog editTextDialog = EditTextDialog.newInstance("修改昵称", saveName, 24);
                 editTextDialog.show(getSupportFragmentManager(), "edit");
                 editTextDialog.setPositiveListener(new EditTextDialog.PositiveListener() {
                     @Override
                     public void Positive(String value) {
                         if (!TextUtils.isEmpty(value) && value.length() > 4 && !saveName.equals(value)) {
                             showToast("暂不支持修改用户名");
-                            username = null;
+                           // username = null;
                         }
                     }
                 });
@@ -175,6 +176,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
 
                     @Override
                     public void onSuccess(Result<UserInfo> response) {
+                        System.out.println(response.getData().toString());
                         if ("00000".equals(response.getCode())) {
                             setUserInfo(response.getData());
                         } else {
@@ -198,9 +200,11 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
             showUserImageUpdateError();
             return;
         }
+        List<File> avatars0=new ArrayList<>();
+        avatars0.add(file);
         OkUtil.post()
-                .url(Api.uploadUserImage)
-                .addFile("file", file)
+                .url(Api.uploadUserImage+"?username="+mUserId)
+                .addFiles("formCollection", avatars0)
                 .execute(new ResultCallback<Result<List<String>>>() {
                     @Override
                     public void onSuccess(Result<List<String>> response) {
@@ -227,17 +231,16 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
      */
     private void postUpdateUserInfo() {
         OkUtil.post()
-                .url(Api.updateUser)
-                .addParam("id", mUserId)
-                .addParam("username", username)
+                .url(Api.updateUserAvatar)
+                .addParam("username", mUserId)
                 .addParam("avatar", avatar)
-                .execute(new ResultCallback<Result<UserInfo>>() {
+                .execute(new ResultCallback<Result<Object>>() {
 
                     @Override
-                    public void onSuccess(Result<UserInfo> response) {
+                    public void onSuccess(Result<Object> response) {
                         if ("00000".equals(response.getCode())) {
                             showUserUpdateSuccess();
-                            setUserInfo(response.getData());
+                            //setUserInfo(response.getData());
                         } else {
                             showUserUpdateError();
                         }
@@ -270,7 +273,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
             mPersonName.setText(userInfo.getUsername());
         }
 
-        cleanData();
+        //cleanData();
     }
 
     /**
@@ -278,7 +281,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
      */
     private void cleanData() {
         avatar = null;
-        username = null;
+   //     username = null;
         sex = null;
         qq = null;
         signature = null;

@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/navigation_camera"
+        android:icon="@drawable/ic_camera_selector"
+        android:title="@string/nav_camera"/>
+    <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_homepage_selector"
         android:title="@string/nav_home"/>
 
-    <item
-        android:id="@+id/navigation_camera"
-        android:icon="@drawable/ic_camera_selector"
-        android:title="@string/nav_camera"/>
 
     <item
         android:id="@+id/navigation_interactive"

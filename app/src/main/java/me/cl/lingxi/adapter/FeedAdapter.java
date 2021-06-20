@@ -117,7 +117,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MoodViewHolder
             FeedLikeIncludeBinding likeBinding = binding.includeFeedLike;
 
             mUserImg = infoBinding.userImg;
-            mUserName = infoBinding.userName;
+            mUserName = infoBinding.userNickname;
             mFeedTime = infoBinding.feedTime;
             mFeedInfo = infoBinding.feedInfo;
             mFeedBody = infoBinding.feedBody;
@@ -142,17 +142,17 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MoodViewHolder
         public void bindItem(Feed feed, int position) {
             mFeed = feed;
             mPosition = position;
-            User user = feed.getUser();
-            user = user == null ? new User() : user;
+//            User user = feed.getUser();
+//            user = user == null ? new User() : user;
             // 动态详情
-            ContentUtil.loadUserAvatar(mUserImg, user.getAvatar());
+            ContentUtil.loadUserAvatar(mUserImg, feed.getAvatar());
 
-            mUserName.setText(user.getUsername());
-           // mFeedTime.setText(DateUtil.showTime(feed.getCreateTime()));
+            mUserName.setText(feed.getNickname());
+            mFeedTime.setText(feed.getCreateTime());
 //            feed.getFeedInfo()
             mFeedInfo.setText(FeedContentUtil.getFeedText(feed.getContent(), mFeedInfo));
             // 图片
-            final List<String> photos = feed.getPhotoList();
+            final List<String> photos = feed.getPhotoesList();
             if (photos != null && photos.size() > 0) {
                 mRecyclerView.setVisibility(View.VISIBLE);
                 int size = photos.size();
@@ -165,12 +165,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MoodViewHolder
                 mRecyclerView.setVisibility(View.GONE);
             }
             // 查看评论点赞数String.valueOf(feed.getViewNum())
-            mFeedViewNum.setText("0");
+            mFeedViewNum.setText(String.valueOf(feed.getViews()));
             mFeedCommentNum.setText(String.valueOf(feed.getComments()));
+            mFeedLikeNum.setText(String.valueOf(feed.getLikes()));
             // 是否已经点赞feed.isLike()
-            mFeedLikeIcon.setSelected(false);
+            mFeedLikeIcon.setSelected(feed.isLike());
             // 点赞列表
-           // ContentUtil.setLikePeople(mLikePeople, mFeedLikeNum, mLikeWindow, feed.getLikeList());
+            ContentUtil.setLikePeople(mLikePeople, mFeedLikeNum, mLikeWindow, feed.getLikesList());
         }
 
         @Override

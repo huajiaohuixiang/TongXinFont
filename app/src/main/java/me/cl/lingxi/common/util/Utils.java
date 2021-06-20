@@ -111,11 +111,11 @@ public class Utils {
     /**
      * 获取点赞人字符串
      */
-    public static String getLikeStr(List<Like> likes) {
+    public static String getLikeStr(List<String> likes) {
         StringBuilder likeStr = new StringBuilder();
         for (int i = 0, size = likes.size(); i < size; i++) {
             if (i == 3) break;
-            likeStr.append("{").append(likes.get(i).getUsername()).append("、}");
+            likeStr.append("{").append(likes.get(i)).append("、}");
         }
         if (likes.size() > 0)
             likeStr = new StringBuilder(likeStr.substring(0, likeStr.length() - 2) + "}");
@@ -125,13 +125,13 @@ public class Utils {
     /**
      * 获取所有点赞人字符串
      */
-    public static String getLongLikeStr(List<Like> likes) {
+    public static String getLongLikeStr(List<String> likes) {
         StringBuilder likeStr = new StringBuilder();
         for (int i = 0; i < likes.size(); i++) {
             if (i == likes.size() - 1) {
-                likeStr.append("{").append(likes.get(i).getUsername()).append("}");
+                likeStr.append("{").append(likes.get(i)).append("}");
             } else {
-                likeStr.append("{").append(likes.get(i).getUsername()).append("、}");
+                likeStr.append("{").append(likes.get(i)).append("、}");
             }
         }
         return likeStr.toString();
@@ -204,13 +204,7 @@ public class Utils {
         }
     }
 
-    /**
-     * 发起添加群流程。群号：大龄儿童二次元同好群(468620613) 的 key 为： U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9
-     * 调用 joinQQGroup(U6BT7JHlX9bzMdCNWjkIjwu5g3Yt_Wi9) 即可发起手Q客户端申请加群 大龄儿童二次元同好群(468620613)
-     *
-     * @param key 由官网生成的key
-     * @return 返回true表示呼起手Q成功，返回fals表示呼起失败
-     */
+
     public static boolean joinQQGroup(Context context, String key) {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));

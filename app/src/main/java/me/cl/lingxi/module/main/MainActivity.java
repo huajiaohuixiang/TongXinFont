@@ -36,6 +36,7 @@ import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.databinding.IncludeBottomNavigationBinding;
 import me.cl.lingxi.databinding.MianActivityBinding;
 import me.cl.lingxi.entity.AppVersion;
+import me.cl.lingxi.module.setting.AboutActivity;
 import okhttp3.Call;
 
 public class MainActivity extends BaseActivity {
@@ -49,7 +50,7 @@ public class MainActivity extends BaseActivity {
     private MessageFragment mMessageFragment;
     private MineFragment mMineFragment;
 
-    private Integer currentIndex = 0;
+    private Integer currentIndex = 1;
 
     private String mExit = "MM";
     private long mExitTime = 0;
@@ -88,7 +89,7 @@ public class MainActivity extends BaseActivity {
         switchNavigation(mNavigationBinding.ivFeed);
 
         mNavigationBinding.rlFeed.setOnClickListener(v -> {
-            currentIndex = 1;
+            currentIndex =1;
             switchPage();
         });
 
@@ -183,7 +184,7 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case Constants.ACTIVITY_PUBLISH:
-                int id = data.getIntExtra(Constants.GO_INDEX, R.id.navigation_home);
+                int id = data.getIntExtra(Constants.GO_INDEX, R.id.navigation_camera);
                 // 非导航本身事件，手动切换
                 mActivityBinding.bottomNavigation.setSelectedItemId(id);
                 break;
@@ -265,18 +266,22 @@ public class MainActivity extends BaseActivity {
 
     // 检查新版本
     private void checkNewVersion() {
-        OkUtil.post()
+        OkUtil.get()
                 .url(Api.latestVersion)
-                .execute(new ResultCallback<Result<AppVersion>>() {
+                .execute(new ResultCallback<Result<String>>() {
                     @Override
-                    public void onSuccess(Result<AppVersion> response) {
+                    public void onSuccess(Result<String> response) {
                         String code = response.getCode();
-                        AppVersion data = response.getData();
+                        String data=response.getData();
                         if (ResultConstant.CODE_SUCCESS.equals(code) && data != null) {
                             int versionCode = Utils.getAppVersionCode(MainActivity.this);
-                            if (versionCode < data.getVersionCode()) {
-                                showUpdate(data);
+                            if (versionCode >= Integer.valueOf(data)) {
+                                showToast( "已是最新版");
+                            } else {
+                                showUpdate();
                             }
+                        } else {
+                            showToast("版本信息获取失败");
                         }
                     }
 
@@ -287,22 +292,15 @@ public class MainActivity extends BaseActivity {
     }
 
     // 展示更新弹窗
-    private void showUpdate(final AppVersion appVersion) {
+    private void showUpdate() {
         AlertDialog.Builder mDialog = new AlertDialog.Builder(this);
         mDialog.setTitle("发现新版本");
-        mDialog.setMessage(appVersion.getUpdateInfo());
-        if (appVersion.getUpdateFlag() != 2) {
-            mDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    saveUpdateFlag();
-                }
-            });
-        }
+
+
         mDialog.setPositiveButton("更新", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                gotoDownload(appVersion.getApkUrl());
+                gotoDownload(Api.latestApp);
             }
         }).setCancelable(false).create().show();
     }

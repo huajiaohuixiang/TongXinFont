@@ -36,20 +36,49 @@
             android:background="#dcdcdc" />
 
         <EditText
-            android:id="@+id/phone"
+            android:id="@+id/hint_stu_id2"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginTop="5dp"
             android:background="@null"
-            android:hint="@string/hint_phone"
+            android:hint="@string/hint_stu_id"
             android:inputType="number"
+            android:lines="1"
             android:maxLength="11"
             android:maxLines="1"
             android:padding="7dp"
-            android:lines="1"
             android:textSize="16sp" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dcdcdc" />
+
+        <Button
+            android:id="@+id/button2"
+            style="@style/AppTheme.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:onClick="getIdentityCode"
+            android:text="@string/idcode_get" />
+
+        <EditText
+            android:id="@+id/hint_identity_code2"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="5dp"
+            android:background="@null"
+            android:hint="@string/hint_identity_code"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="11"
+            android:maxLines="1"
+            android:padding="7dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#dcdcdc" />

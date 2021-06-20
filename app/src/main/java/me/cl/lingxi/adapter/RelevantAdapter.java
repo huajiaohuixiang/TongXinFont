@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import me.cl.lingxi.common.config.Api;
+import me.cl.lingxi.common.okhttp.OkUtil;
+import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.databinding.RelevantRecycleItemBinding;
@@ -21,6 +25,7 @@ import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Relevant;
 import me.cl.lingxi.entity.Reply;
 import me.cl.lingxi.entity.User;
+import okhttp3.Call;
 
 /**
  * Reply Adapter
@@ -80,7 +85,7 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
             super(binding.getRoot());
 
             mUserImg = binding.userImg;
-            mUserName = binding.userName;
+            mUserName = binding.userNickname;
             mRelevantTime = binding.relevantTime;
             mRelevantInfo = binding.relevantInfo;
             mFeedInfo = binding.feedInfo;
@@ -93,7 +98,7 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
         public void bindItem(Relevant relevant) {
             mRelevant = relevant;
             Comment comment = relevant.getComment();
-            User user = comment.getUser();
+          //  User user = comment.getUser();
             Integer replyNum = relevant.getReplyNum();
             StringBuilder relevantInfo = new StringBuilder();
             String timeStr = "";
@@ -102,7 +107,7 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
                 for (int i = 0, size = replyList.size(); i < size; i++) {
                     Reply reply = replyList.get(i);
                     if (i == 0) {
-                        user = reply.getUser();
+                        //user = reply.getUser();
                         timeStr = reply.getCreateTime();
                         relevantInfo.append(reply.getCommentInfo());
                     } else {
@@ -111,23 +116,48 @@ public class RelevantAdapter extends RecyclerView.Adapter<RelevantAdapter.Releva
                     }
 
                 }
-                relevantInfo.append("//{@").append(comment.getUser().getUsername()).append("}:")
-                        .append(comment.getCommentInfo());
+                relevantInfo.append("//{@").append(comment.getUsername()).append("}:")
+                        .append(comment.getComment());
             } else {
-                timeStr = comment.getCreateTime();
-                relevantInfo.append(comment.getCommentInfo());
+                timeStr = comment.getComTime();
+                relevantInfo.append(comment.getComment());
             }
 
-            ContentUtil.loadUserAvatar(mUserImg, user.getAvatar());
+            ContentUtil.loadUserAvatar(mUserImg,getUserAvatar(comment.getUsername()));
 
-            mUserName.setText(user.getUsername());
+            mUserName.setText(comment.getUsername());
             mRelevantTime.setText(timeStr);
 
             mRelevantInfo.setText(Utils.colorFormat(relevantInfo.toString()));
 
             Feed feed = relevant.getFeed();
-            String feedInfo = "{" + feed.getUser().getUsername() + "}：" + feed.getFeedInfo();
+            String feedInfo = "{" + feed.getNickname() + "}：" + feed.getContent();
             mFeedInfo.setText(Utils.colorFormat(feedInfo));
+        }
+
+
+        private String getUserAvatar(String username){
+            final String[] result = new String[1];
+            OkUtil.post()
+                    .url(Api.getUserAvatar)
+                    .addParam("username",username)
+                    .execute(new ResultCallback<Result<String>>() {
+                        @Override
+                        public void onSuccess(Result<String> response) {
+                            String code = response.getCode();
+                            if (!"00000".equals(code)) {
+
+                                result[0] ="";
+                            }
+                            result[0]=response.getData();
+                        }
+
+                        @Override
+                        public void onError(Call call, Exception e) {
+
+                        }
+                    });
+            return  result[0];
         }
 
         @Override

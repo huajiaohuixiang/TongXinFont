@@ -4,7 +4,7 @@
     <!-- Theme color -->
     <color name="colorPrimaryDark">@color/white</color>
     <color name="colorPrimary">@color/white</color>
-    <color name="colorAccent">@color/grapefruit</color>
+    <color name="colorAccent">@color/blue_aqua</color>
     <color name="textColorPrimary">@color/textColorBasic</color>
 
     <color name="textColorBasic">#333333</color>

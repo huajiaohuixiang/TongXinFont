@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="me.cl.lingxi">
+    package="me.cl.lingxi"
+    android:versionCode="2"
+    android:versionName="1.1">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,6 +14,7 @@
 
     <application
         android:name=".module.LxApplication"
+
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="${APP_NAME}"
@@ -98,7 +101,9 @@
             android:name=".module.setting.SettingsActivity" />
         <activity
             android:name=".module.feed.TopicEitActivity" />
-
+        <activity android:name=".module.mine.PostFragmentActivity"/>
+        <activity android:name=".module.mine.LikeFragmentActivity"/>
+        <activity android:name=".module.mine.MyCommentActivity"/>
         <!-- PhotoPicker start -->
         <activity
             android:name="me.iwf.photopicker.PhotoPickerActivity"

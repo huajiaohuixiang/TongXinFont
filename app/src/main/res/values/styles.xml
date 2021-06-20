@@ -5,7 +5,7 @@
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/blue_aqua</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
         <!-- 背景色 -->
         <item name="android:windowBackground">@color/background</item>
@@ -15,7 +15,7 @@
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="titleTextColor">@color/textColorBasic</item>
         <!-- 按钮默认 -->
-        <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/blue_aqua</item>
         <!-- 水波纹 -->
         <item name="colorControlHighlight">@color/transparent</item>
         <!-- 引入SearchView的自定义样式 -->

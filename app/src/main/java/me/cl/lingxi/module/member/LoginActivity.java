@@ -105,7 +105,10 @@ public class LoginActivity extends BaseActivity {
                                 SPUtil.build().putBoolean(Constants.SP_BEEN_LOGIN, true);
                                 SPUtil.build().putString(Constants.SP_USER_ID, user.getUsername());
                                 SPUtil.build().putString(Constants.SP_USER_NAME, user.getUsername());
-                             //   SPUtil.build().putString(Api.X_APP_TOKEN, user.getToken());
+                          //      SPUtil.build().putString("nickname", user.);
+
+                                SPUtil.build().putString(Api.X_APP_TOKEN, user.getToken());
+
                                 OkUtil.newInstance().addCommonHeader(Api.X_APP_TOKEN, "Bearer "+user.getToken());
                                 goHome();
                                 break;

@@ -35,7 +35,8 @@ public class ContentUtil {
      * 设置用户头像，相对路径
      */
     public static void loadUserAvatar(ImageView imageView, String avatar) {
-        String url = Constants.IMG_URL + avatar;
+        //Constants.IMG_URL +
+        String url = avatar;
         loadAvatar(imageView, url);
     }
 
@@ -55,7 +56,8 @@ public class ContentUtil {
      * 加载动态图片
      */
     public static void loadFeedImage(ImageView imageView, String url) {
-        url = Constants.IMG_URL + url;
+        //Constants.IMG_URL +
+        url =  url;
         GlideApp.with(imageView.getContext())
                 .load(url)
                 .centerCrop()
@@ -86,18 +88,18 @@ public class ContentUtil {
     }
 
     /**
-     * 加载模糊图片，相对路径
+     * 加载模糊图片，相对路径Constants.IMG_URL +
      */
     public static void loadRelativeBlurImage(ImageView imageView, String url) {
-        url = Constants.IMG_URL + url;
+        url =  url;
         loadBlurImage(imageView, url);
     }
 
     /**
-     * 加载模糊图片，相对路径，模糊度最大25
+     * 加载模糊图片，相对路径，模糊度最大25Constants.IMG_URL +
      */
     public static void loadRelativeBlurImage(ImageView imageView, String url, int radius) {
-        url = Constants.IMG_URL + url;
+        url =  url;
         loadBlurImage(imageView, url, radius);
     }
 
@@ -142,7 +144,7 @@ public class ContentUtil {
     /**
      * 设置喜欢面板
      */
-    public static void setLikePeople(TextView likePeople, TextView likeNum, LinearLayout likeWindow, List<Like> likeList) {
+    public static void setLikePeople(TextView likePeople, TextView likeNum, LinearLayout likeWindow, List<String> likeList) {
         likeList = likeList == null ? new ArrayList<>() : likeList;
         int num = likeList.size();
         likeNum.setText(String.valueOf(num));
@@ -169,7 +171,7 @@ public class ContentUtil {
     /**
      * 设置喜欢面板-所有
      */
-    public static void setLikePeopleAll(TextView likePeople, TextView likeNum, LinearLayout likeWindow, List<Like> likeList) {
+    public static void setLikePeopleAll(TextView likePeople, TextView likeNum, LinearLayout likeWindow, List<String> likeList) {
         int num = likeList == null ? 0 : likeList.size();
         likeNum.setText(String.valueOf(num));
         if (num == 0) {
@@ -196,11 +198,11 @@ public class ContentUtil {
                 ArrayList<String> urls = new ArrayList<>(photos);
                 int size = urls.size();
                 // 拼接url
-                for (int i = 0; i < size; i++) {
-                    String photo = urls.get(i);
-                    photo = Constants.IMG_URL + photo;
-                    urls.set(i, photo);
-                }
+//                for (int i = 0; i < size; i++) {
+//                    String photo = urls.get(i);
+//                    photo = Constants.IMG_URL + photo;
+//                    urls.set(i, photo);
+//                }
                 if (mOnItemListener != null) mOnItemListener.onPhotoClick(urls, position);
             }
         });

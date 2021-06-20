@@ -6,78 +6,62 @@ import java.util.List;
 // 评论
 public class Comment implements Serializable {
 
-    private String id;
-    private String feedId;
-    private User user;
-    private User toUser;
-    private String commentInfo;
-    private String createTime;
-    private String updateTime;
-    private Integer replyNum;
+    private String _id;
+    private String username;
+    private String nickname;
+    private String avatar;
+    private String comment;
+    private String comTime;
+    private Integer comments;
+    private Integer likes;
     private List<Reply> replyList;
 
-    public String getId() {
-        return id;
+    public String get_id() {
+        return _id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
-    public String getFeedId() {
-        return feedId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFeedId(String feedId) {
-        this.feedId = feedId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public User getUser() {
-        return user;
+    public String getComment() {
+        return comment;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public User getToUser() {
-        return toUser;
+    public String getComTime() {
+        return comTime;
     }
 
-    public void setToUser(User toUser) {
-        this.toUser = toUser;
+    public void setComTime(String comTime) {
+        this.comTime = comTime;
     }
 
-    public String getCommentInfo() {
-        return commentInfo;
+    public Integer getComments() {
+        return comments;
     }
 
-    public void setCommentInfo(String commentInfo) {
-        this.commentInfo = commentInfo;
+    public void setComments(Integer comments) {
+        this.comments = comments;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public Integer getLikes() {
+        return likes;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Integer getReplyNum() {
-        return replyNum;
-    }
-
-    public void setReplyNum(Integer replyNum) {
-        this.replyNum = replyNum;
+    public void setLikes(Integer likes) {
+        this.likes = likes;
     }
 
     public List<Reply> getReplyList() {
@@ -86,5 +70,21 @@ public class Comment implements Serializable {
 
     public void setReplyList(List<Reply> replyList) {
         this.replyList = replyList;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

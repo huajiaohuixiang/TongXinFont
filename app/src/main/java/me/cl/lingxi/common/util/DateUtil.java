@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * 时间换算类
@@ -17,15 +18,23 @@ public class DateUtil {
      * @param date 时间
      * @return 处理得到的时间字符串
      */
-    public static String showTime(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.SIMPLIFIED_CHINESE);
-        Date cTime = null;
+    public static String showTime(String date)  {
+//        /, Locale.SIMPLIFIED_CHINESE
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
-            cTime = sdf.parse(date);
+            return  sdf.parse(date).toString();
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return showTime(cTime);
+        return "";
+//        Date cTime = null;
+//        try {
+//            cTime = sdf.parse(date);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return showTime(cTime);
     }
 
     public static String showTime(Date data) {

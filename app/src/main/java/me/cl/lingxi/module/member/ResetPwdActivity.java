@@ -28,10 +28,10 @@ public class ResetPwdActivity extends BaseActivity {
 
     private Toolbar mToolbar;
     private EditText mUsername;
-    private EditText mPhone;
+    private EditText mStu_id;
     private EditText mPassword;
     private EditText mDoPassword;
-
+    private EditText mIdentityCode;
     private LoadingDialog updateProgress;
 
     @Override
@@ -47,8 +47,8 @@ public class ResetPwdActivity extends BaseActivity {
         mUsername = mActivityBinding.username;
         mPassword = mActivityBinding.password;
         mDoPassword = mActivityBinding.doPassword;
-        mPhone = mActivityBinding.phone;
-
+        mStu_id = mActivityBinding.hintStuId2;
+        mIdentityCode=mActivityBinding.hintIdentityCode2;
         ToolbarUtil.init(mToolbar, this)
                 .setTitle(R.string.title_bar_reset_pwd)
                 .setBack()
@@ -60,34 +60,62 @@ public class ResetPwdActivity extends BaseActivity {
 
     public void goUpdatePwd(View view) {
         String uName = mUsername.getText().toString().trim();
-        String uPhone = mPhone.getText().toString().trim();
+        String uPhone = mStu_id.getText().toString().trim();
         String uPwd = mPassword.getText().toString().trim();
         String uDoPwd = mDoPassword.getText().toString().trim();
+        String ucode=mIdentityCode.getText().toString().trim();
         if (TextUtils.isEmpty(uName) || TextUtils.isEmpty(uPwd) || TextUtils.isEmpty(uDoPwd) || TextUtils.isEmpty(uPhone)) {
             showToast(R.string.toast_reg_null);
         }
-        if (uPhone.length() != 11) {
-            showToast(R.string.toast_phone_format_error);
-            return;
-        }
+
         if (!uPwd.equals(uDoPwd)) {
             showToast(R.string.toast_again_error);
             return;
         }
-        postUpdatePwd(uName, uPwd, uPhone);
+        postUpdatePwd(uName, uPwd, ucode);
     }
+    public void getIdentityCode(View view){
 
-    public void postUpdatePwd(String userName, String userPwd, String phone) {
+        String uName = mUsername.getText().toString().trim();
+        String uSutId= mStu_id.getText().toString().trim();
+
+
+        OkUtil.post().
+                url(Api.userIdentityCode)
+                .addParam("username",uName)
+                .addParam("stuid",uSutId)
+                .execute(new ResultCallback<Result<String>>() {
+
+                    @Override
+                    public void onSuccess(Result<String> response) {
+                        String code = response.getCode();
+                        switch (code) {
+                            case "00000":
+                                showToast(R.string.codeinfo);
+                                break;
+                            case "00001":
+                                showToast(response.getData());
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        showToast("发送验证码失败！");
+                    }
+                });
+    }
+    public void postUpdatePwd(String userName, String userPwd, String code) {
         OkUtil.post()
                 .url(Api.resetPassword)
                 .addParam("username", userName)
-                .addParam("password", userPwd)
-                .addParam("phone", phone)
+                .addParam("newPass", userPwd)
+                .addParam("code", code)
                 .setProgressDialog(updateProgress)
-                .execute(new ResultCallback<Result<UserInfo>>() {
+                .execute(new ResultCallback<Result<String>>() {
 
                     @Override
-                    public void onSuccess(Result<UserInfo> response) {
+                    public void onSuccess(Result<String> response) {
                         String code = response.getCode();
                         switch (code) {
                             case "00000":
@@ -98,7 +126,8 @@ public class ResetPwdActivity extends BaseActivity {
                                 showToast(R.string.toast_reset_pwd_user);
                                 break;
                             default:
-                                showToast(R.string.toast_reset_pwd_error);
+//                                R.string.toast_reset_pwd_error
+                                showToast(response.getMsg());
                                 break;
                         }
                     }

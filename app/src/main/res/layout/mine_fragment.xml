@@ -24,65 +24,76 @@
                 android:id="@+id/mine_top"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/img_mine_bc">
+                android:background="@drawable/background5">
 
                 <LinearLayout
                     android:id="@+id/user_body"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_width="95dp"
+                    android:layout_height="125dp"
+                    android:layout_alignParentBottom="false"
+                    android:layout_centerInParent="true"
                     android:gravity="center_horizontal"
-                    android:layout_centerInParent="true">
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/user_img"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/img_user"/>
+                        android:src="@drawable/img_user" />
 
                     <TextView
-                        android:id="@+id/user_name"
+                        android:id="@+id/user_nickname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:text="@string/app_name"
                         android:textColor="@color/white"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp" />
 
                     <TextView
-                        android:id="@+id/user_description"
+                        android:id="@+id/user_stu_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:gravity="center"
-                        android:textColor="#ffffff"
                         android:paddingLeft="@dimen/spacing_16"
                         android:paddingRight="@dimen/spacing_16"
-                        android:text="签名：暂无签名"/>
+                        android:text="1853488"
+                        android:textColor="#ffffff" />
                 </LinearLayout>
             </RelativeLayout>
 
             <TextView
                 android:id="@+id/action_reply"
+                style="@style/AppTheme.MoreEntry"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="6dp"
-                style="@style/AppTheme.MoreEntry"
                 android:drawableStart="@drawable/ic_favorite"
                 android:drawableEnd="@drawable/ic_more"
-                android:text="@string/title_bar_my_reply"/>
+                android:text="@string/title_bar_my_likes" />
 
             <TextView
                 android:id="@+id/action_relevant"
+                style="@style/AppTheme.MoreEntry"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="1dp"
-                style="@style/AppTheme.MoreEntry"
                 android:drawableStart="@drawable/ic_eit"
                 android:drawableEnd="@drawable/ic_more"
-                android:text="@string/title_bar_relevant"/>
+                android:text="@string/title_bar_my_reply" />
+
+            <TextView
+                android:id="@+id/action_mypost"
+                style="@style/AppTheme.MoreEntry"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:drawableStart="@drawable/ic_camera_add"
+                android:drawableEnd="@drawable/ic_more"
+                android:text="@string/title_bar_my_posts" />
 
             <TextView
                 android:id="@+id/action_setting"

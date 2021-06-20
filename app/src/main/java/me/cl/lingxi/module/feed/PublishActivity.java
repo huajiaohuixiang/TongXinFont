@@ -19,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
     private String mInfo = "";
     private final boolean showAdd = false;
 
+    private  String username;
     // 话题与艾特相关
     private final StringBuilder mFeedInfoSb = new StringBuilder();
     private final List<String> mActionList = new ArrayList<>();
@@ -108,8 +110,14 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
         setLoading("发布中...");
         initTextChangeListener();
         initRecycleView();
+        initView();
     }
-
+    private void initView() {
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle == null) return;
+        username = (String) bundle.getSerializable("username");
+        if (username == null) return;
+    }
     private void initTextChangeListener() {
         mEtFeedInfo.addTextChangedListener(new TextWatcher() {
             @Override
@@ -312,9 +320,12 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
         // 压缩图片
         photos = ImageUtil.compressorImage(this, photos);
 
+
+
+
         OkUtil.post()
-                .url(Api.uploadFeedImage)
-                .addFiles("file", ImageUtil.pathToImageFile(photos))
+                .url(Api.uploadFeedImage+"?username="+username)
+                .addFiles("formCollection", ImageUtil.pathToImageFile(photos))
                 .execute(new ResultCallback<Result<List<String>>>() {
                     @Override
                     public void onSuccess(Result<List<String>> response) {
@@ -325,17 +336,19 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
                             return;
                         }
                         if (!"00000".equals(code)) {
-                            showToast("图片上传失败");
+                            showToast("图片上传失败1");
                             addPhotoAdd(mPhotos);
                             return;
                         }
                         // 发送动态
+                        showToast(response.getData().get(0));
                         postSaveFeed(response.getData());
                     }
 
                     @Override
                     public void onError(Call call, Exception e) {
-                        showToast("图片上传失败");
+                        showToast(e.getMessage());
+                        showToast("图片上传失败2");
                         addPhotoAdd(mPhotos);
                     }
                 });
@@ -344,13 +357,18 @@ public class PublishActivity extends BaseActivity implements View.OnClickListene
     // 发布动态
     private void postSaveFeed(List<String> uploadImg) {
         removePhotoAdd(uploadImg);
+        if(uploadImg==null){
+            uploadImg =new ArrayList<>();
+        }
         OkUtil.post()
                 .url(Api.saveFeed)
-                .addParam("feedInfo", mInfo)
-                .addUrlParams("photoList", uploadImg)
-                .execute(new ResultCallback<Result<Feed>>() {
+                .addParam("username",username)
+                .addParam("content", mInfo)
+                .addUrlParams("imageList", uploadImg)
+
+                .execute(new ResultCallback<Result<Object>>() {
                     @Override
-                    public void onSuccess(Result<Feed> response) {
+                    public void onSuccess(Result<Object> response) {
                         dismissLoading();
                         String code = response.getCode();
                         if (!"00000".equals(code)) {

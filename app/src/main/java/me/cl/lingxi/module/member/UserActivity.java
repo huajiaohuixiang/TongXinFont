@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -36,10 +35,10 @@ import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ContentUtil;
+import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.databinding.UserActivityBinding;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.PageInfo;
-import me.cl.lingxi.entity.User;
 import me.cl.lingxi.entity.UserInfo;
 import me.cl.lingxi.module.feed.FeedActivity;
 import me.iwf.photopicker.PhotoPreview;
@@ -61,15 +60,20 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     private TextView mTitleName;
     private TextView mUserName;
     private TextView mContact;
+    private TextView mAttention;
     private TextView mFeedNum;
-
+    private  TextView mattentionNum;
+    private  TextView mfenxiNum;
     private boolean isPostUser = true;
-    private String mUserId;
+    private String saveId;
+    private String saveNickname;
+    private String username;
+    private String nickname;
     private List<Feed> mFeedList = new ArrayList<>();
     private ConcatAdapter mConcatAdapter;
     private FeedAdapter mFeedAdapter;
     private LoadMoreAdapter mLoadMoreAdapter = new LoadMoreAdapter();
-
+    private boolean isFollow=false;
     private int mPageNum = 1;
     private int mPageSize = 10;
     private final int MODE_REFRESH = 1;
@@ -85,6 +89,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void init() {
+        saveId = SPUtil.build().getString(Constants.SP_USER_ID);
+        saveNickname=SPUtil.build().getString("savenickname");
         mToolbar = mActivityBinding.toolbar;
         mSwipeRefreshLayout = mActivityBinding.swipeRefreshLayout;
         mRecyclerView = mActivityBinding.recyclerView;
@@ -92,32 +98,94 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         mButtonBar = mActivityBinding.buttonBar;
         mParallax = mActivityBinding.parallax;
         mTitleName = mActivityBinding.titleName;
-        mUserName = mActivityBinding.userName;
+        mUserName = mActivityBinding.userNickname;
         mContact = mActivityBinding.contact;
         mFeedNum = mActivityBinding.feedNum;
-
+        mAttention=mActivityBinding.attention;
+        mattentionNum=mActivityBinding.relationshipAttention;
+        mfenxiNum=mActivityBinding.relationshipFans;
+        mAttention.setOnClickListener(this);
         mContact.setOnClickListener(this);
 
         ToolbarUtil.init(mToolbar, this)
                 .setBack()
                 .build();
+//        if (bundle != null) {
+//             username =(String) bundle.getSerializable(Constants.PASSED_USER_INFO);
+//            if (username != null) {
+//                isPostUser = false;
+//                username = user.getUsername();
+//                setAvatar(avatar);
+//            }
+//        }
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        String username = intent.getStringExtra(Constants.PASSED_USER_NAME);
-        if (bundle != null) {
-            User user = (User) bundle.getSerializable(Constants.PASSED_USER_INFO);
-            if (user != null) {
-                isPostUser = false;
-                username = user.getUsername();
-                setAvatar(user.getAvatar());
-            }
-        }
+
+
+        Bundle bundle = this.getIntent().getExtras();
+
+        username = (String) bundle.getSerializable(Constants.PASSED_USER_NAME);
+        nickname =(String) bundle.getSerializable("nickname");
+        isFollow();
         postSearchUser(username);
 
         initRecyclerView();
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.contact) {
+            showToast("紧张开发中");
+        }else if(view.getId()==R.id.attention){
+            if(isFollow){
+                unfollow();
+                isFollow=false;
+                mAttention.setText("已关注");
+            }else {
+                follow();
+                isFollow=true;
+                mAttention.setText("关注");
+            }
+        }
+    }
+
+    private void follow() {
+        OkUtil.post().url(Api.Follow)
+                .addParam("username1",saveId)
+                .addParam("username2",username)
+                .addParam("nickname1",saveNickname)
+                .addParam("nickname2",nickname)
+                .execute(new ResultCallback() {
+                    @Override
+                    public void onSuccess(Object response) {
+
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+
+                    }
+                });
+    }
+
+    private void unfollow(){
+        OkUtil.post().url(Api.unFollow)
+                .addParam("uid1",saveId)
+                .addParam("uid2",username)
+                .execute(new ResultCallback() {
+                    @Override
+                    public void onSuccess(Object response) {
+
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+
+                    }
+                });
+    }
+
+    private void postLike(Feed feed, int position) {
+    }
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -132,12 +200,43 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     }
 
     /**
+     * 看看是否关注
+     */
+    private void isFollow(){
+        OkUtil.post()
+                .url(Api.isFollow)
+                .addParam("username",saveId)
+                .addParam("username2",username)
+                .execute(new ResultCallback<Result<String>>() {
+                    @Override
+                    public void onSuccess(Result<String> response) {
+                        if (!"00000".equals(response.getCode())) {
+                            showToast(response.getMsg());
+                            showToast("获取失败");
+                            return;
+                        }
+                        if(response.getData().equals("1")){
+                            isFollow=true;
+                            mAttention.setText("已关注");
+                        }else{
+                            isFollow=false;
+                            mAttention.setText("关注");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+
+                    }
+                });
+    }
+
+    /**
      * 搜索用户
      */
     private void postSearchUser(String username) {
-        OkUtil.post()
-                .url(Api.searchUser)
-                .addParam("username", username)
+        OkUtil.get()
+                .url(Api.userInfo+"?username="+ username)
                 .execute(new ResultCallback<Result<UserInfo>>() {
 
                     @Override
@@ -156,30 +255,30 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
      * 设置用户相关信息
      */
     private void initUser(UserInfo userInfo) {
-        boolean isRc = false;
-        String avatar = "";
         String username;
+        String avatar;
+        String nickname;
         if (userInfo != null) {
-            mUserId = userInfo.getId();
+            avatar = userInfo.getAvatar();
+            username=userInfo.getUsername();
+            nickname=userInfo.getNickname();
+
             username = userInfo.getUsername();
             avatar = userInfo.getAvatar();
-            if (!TextUtils.isEmpty(userInfo.getImToken())) {
-                isRc = true;
-            }
+
             initEvent();
             pageFeed(mPageNum, mPageSize);
         } else {
-            username = "未知用户";
-            showToast(username);
+            avatar="";
+           nickname= "未知用户";
+            showToast(nickname);
         }
-        mTitleName.setText(username);
-        mUserName.setText(username);
-        if (!isRc) {
-            mContact.setVisibility(View.GONE);
-        }
-        if (isPostUser) {
-            setAvatar(avatar);
-        }
+        mTitleName.setText(nickname);
+        mUserName.setText(nickname);
+        mattentionNum.setText(String.valueOf(userInfo.getFollowing()));
+        mfenxiNum.setText(userInfo.getFollowed());
+        setAvatar(avatar);
+
     }
 
     /**
@@ -213,9 +312,13 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                         goToFeed(feed);
                         break;
                     case R.id.feed_like_layout:
-                        if (feed.isLike()) return;
+                        if (feed.isLike()) {
+                            postUnLike(feed, position);
+                        }
                         // 未点赞点赞
-                        postLike(feed, position);
+                        else {
+                            postAddLike(feed, position);
+                        }
                         break;
                 }
             }
@@ -269,15 +372,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.contact) {
-            showToast("紧张开发中");
-        }
-    }
 
-    private void postLike(Feed feed, int position) {
-    }
+
 
     // 获取动态列表
     private void pageFeed(int pageNum, int pageSize) {
@@ -285,10 +381,10 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
             mSwipeRefreshLayout.setRefreshing(true);
         }
         OkUtil.post()
-                .url(Api.pageFeed)
+                .url(Api.myPostList)
                 .addParam("pageNum", pageNum)
                 .addParam("pageSize", pageSize)
-                .addParam("searchUserId", mUserId)
+                .addParam("username", username)
                 .execute(new ResultCallback<Result<PageInfo<Feed>>>() {
                     @Override
                     public void onSuccess(Result<PageInfo<Feed>> response) {
@@ -307,6 +403,10 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                         }
                         mPageNum++;
                         List<Feed> list = page.getList();
+                        for (Feed post:list
+                        ) {
+                            post.setLike(post.getLikesList().contains(saveId));
+                        }
                         if (mRefreshMode == MODE_LOADING) {
                             updateData(list);
                         } else {
@@ -345,5 +445,72 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         intent.putExtras(bundle);
 //        startActivityForResult(intent, Constants.ACTIVITY_MOOD);
         startActivity(intent);
+    }
+
+    // 点赞                .addParam("type", "0")
+    private void postAddLike(final Feed feed, final int position) {
+        OkUtil.post()
+                .url(Api.saveAction)
+                .addParam("postId", feed.getId())
+                .addParam("username", saveId)
+
+                .execute(new ResultCallback<Result>() {
+                    @Override
+                    public void onSuccess(Result response) {
+                        String code = response.getCode();
+                        if (!"00000".equals(code)) {
+                            showToast(response.getMsg());
+                            showToast("点赞失败");
+                            return;
+                        }
+                        List<String> likeList = new ArrayList<>(feed.getLikesList());
+//                        Like like = new Like();
+//                        like.setUserId(saveUid);
+//                        like.setUsername(saveUName);
+                        likeList.add(saveId);
+                        feed.setLikesList(likeList);
+                        feed.setLike(true);
+                        mFeedAdapter.updateItem(feed, position);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        showToast("点赞失败");
+                    }
+                });
+    }
+
+
+    // 点赞                .addParam("type", "0")
+    private void postUnLike(final Feed feed, final int position) {
+        OkUtil.post()
+                .url(Api.UnsaveAction)
+                .addParam("postId", feed.getId())
+                .addParam("username", saveId)
+
+                .execute(new ResultCallback<Result>() {
+                    @Override
+                    public void onSuccess(Result response) {
+                        String code = response.getCode();
+                        if (!"00000".equals(code)) {
+                            showToast(response.getMsg());
+                            showToast("取消点赞失败");
+                            return;
+                        }
+                        List<String> likeList = new ArrayList<>(feed.getLikesList());
+//                        Like like = new Like();
+//                        like.setUserId(saveUid);
+//                        like.setUsername(saveUName);
+                        likeList.remove(saveId);
+                        feed.setLikesList(likeList);
+                        feed.setLike(false);
+                        mFeedAdapter.updateItem(feed, position);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        showToast("取消点赞失败");
+                    }
+                });
     }
 }

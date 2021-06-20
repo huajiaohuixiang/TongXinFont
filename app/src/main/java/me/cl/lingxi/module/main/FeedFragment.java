@@ -44,7 +44,7 @@ import me.cl.lingxi.module.member.UserActivity;
 import okhttp3.Call;
 
 /**
- * 圈子动态
+ * 圈子动态总览页面
  */
 public class FeedFragment extends BaseFragment {
 
@@ -109,7 +109,7 @@ public class FeedFragment extends BaseFragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.action_share) {
-                            gotoPublish();
+                            gotoPublish(saveUName);
                         }
                         return false;
                     }
@@ -154,16 +154,20 @@ public class FeedFragment extends BaseFragment {
             public void onItemClick(View view, Feed feed, int position) {
                 switch (view.getId()) {
                     case R.id.user_img:
-                        goToUser(feed.getUser());
+                        goToUser(feed.getUsername(),feed.getNickname());
                         break;
                     case R.id.feed_card:
                     case R.id.feed_comment_layout:
                         gotoMood(feed);
                         break;
                     case R.id.feed_like_layout:
-                        if (feed.isLike()) return;
+                        if (feed.isLike()) {
+                            postUnLike(feed, position);
+                        }
                         // 未点赞点赞
-                        postAddLike(feed, position);
+                        else {
+                            postAddLike(feed, position);
+                        }
                         break;
                 }
             }
@@ -197,9 +201,14 @@ public class FeedFragment extends BaseFragment {
         });
     }
 
+
+
     // 前往动态发布
-    private void gotoPublish() {
+    private void gotoPublish(String username) {
         Intent intent = new Intent(getActivity(), PublishActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("username", username);
+        intent.putExtras(bundle);
         startActivityForResult(intent, Constants.ACTIVITY_PUBLISH);
     }
 
@@ -212,27 +221,28 @@ public class FeedFragment extends BaseFragment {
         startActivityForResult(intent, Constants.ACTIVITY_MOOD);
     }
 
-    // 点赞
+    // 点赞                .addParam("type", "0")
     private void postAddLike(final Feed feed, final int position) {
         OkUtil.post()
                 .url(Api.saveAction)
-                .addParam("feedId", feed.getId())
-                .addParam("userId", saveUid)
-                .addParam("type", "0")
+                .addParam("postId", feed.getId())
+                .addParam("username", saveUName)
+
                 .execute(new ResultCallback<Result>() {
                     @Override
                     public void onSuccess(Result response) {
                         String code = response.getCode();
                         if (!"00000".equals(code)) {
+                            showToast(response.getMsg());
                             showToast("点赞失败");
                             return;
                         }
-                        List<Like> likeList = new ArrayList<>(feed.getLikeList());
-                        Like like = new Like();
-                        like.setUserId(saveUid);
-                        like.setUsername(saveUName);
-                        likeList.add(like);
-                        feed.setLikeList(likeList);
+                        List<String> likeList = new ArrayList<>(feed.getLikesList());
+//                        Like like = new Like();
+//                        like.setUserId(saveUid);
+//                        like.setUsername(saveUName);
+                        likeList.add(saveUName);
+                        feed.setLikesList(likeList);
                         feed.setLike(true);
                         mFeedAdapter.updateItem(feed, position);
                     }
@@ -243,6 +253,51 @@ public class FeedFragment extends BaseFragment {
                     }
                 });
     }
+
+
+    // 点赞                .addParam("type", "0")
+    private void postUnLike(final Feed feed, final int position) {
+        OkUtil.post()
+                .url(Api.UnsaveAction)
+                .addParam("postId", feed.getId())
+                .addParam("username", saveUName)
+
+                .execute(new ResultCallback<Result>() {
+                    @Override
+                    public void onSuccess(Result response) {
+                        String code = response.getCode();
+                        if (!"00000".equals(code)) {
+                            showToast(response.getMsg());
+                            showToast("取消点赞失败");
+                            return;
+                        }
+                        List<String> likeList = new ArrayList<>(feed.getLikesList());
+//                        Like like = new Like();
+//                        like.setUserId(saveUid);
+//                        like.setUsername(saveUName);
+                        likeList.remove(saveUName);
+                        feed.setLikesList(likeList);
+                        feed.setLike(false);
+                        mFeedAdapter.updateItem(feed, position);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e) {
+                        showToast("取消点赞失败");
+                    }
+                });
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     // 获取动态列表
     //                .addParam("userId", uid)
@@ -272,6 +327,11 @@ public class FeedFragment extends BaseFragment {
                         }
                         mPage++;
                         List<Feed> list = page.getList();
+                        for (Feed post:list
+                             ) {
+                            post.setLike(post.getLikesList().contains(saveUName));
+                        }
+
                         if (RefreshMODE == MOD_LOADING) {
                             updateData(list);
                         } else {
@@ -318,10 +378,11 @@ public class FeedFragment extends BaseFragment {
     /**
      * 前往用户页面
      */
-    private void goToUser(User user){
+    private void goToUser(String username,String nickname){
         Intent intent = new Intent(getActivity(), UserActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(Constants.PASSED_USER_INFO, user);
+        bundle.putSerializable(Constants.PASSED_USER_NAME, username);
+        bundle.putSerializable("nickname",nickname);
         intent.putExtras(bundle);
         startActivity(intent);
     }

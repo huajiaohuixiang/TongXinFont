@@ -1,5 +1,6 @@
 package me.cl.lingxi.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import me.cl.lingxi.common.config.Api;
+import me.cl.lingxi.common.okhttp.OkUtil;
+import me.cl.lingxi.common.okhttp.ResultCallback;
+import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.databinding.FeedEvaluateRecycleItemBinding;
 import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.Reply;
 import me.cl.lingxi.entity.User;
+import okhttp3.Call;
 
 /**
  * Evaluate Adapter
@@ -26,7 +32,7 @@ import me.cl.lingxi.entity.User;
 public class EvaluateAdapter extends RecyclerView.Adapter<EvaluateAdapter.EvaluateViewHolder> {
 
     private List<Comment> mList;
-
+    private  String avatar;
     private OnItemListener mOnItemListener;
 
     public interface OnItemListener {
@@ -62,7 +68,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<EvaluateAdapter.Evalua
 
     public void setDate(List<Comment> data) {
         mList = data;
-       // notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public void updateData(List<Comment> data) {
@@ -83,7 +89,7 @@ public class EvaluateAdapter extends RecyclerView.Adapter<EvaluateAdapter.Evalua
             super(binding.getRoot());
             RelativeLayout evaluateBody = binding.evaluateBody;
             mUserImg = binding.userImg;
-            mUserName = binding.userName;
+            mUserName = binding.userNickname;
             mEvaluateTime = binding.evaluateTime;
             mEvaluateInfo = binding.evaluateInfo;
             mRecyclerView = binding.recyclerView;
@@ -97,24 +103,49 @@ public class EvaluateAdapter extends RecyclerView.Adapter<EvaluateAdapter.Evalua
 
         public void bindItem(Comment comment) {
             mComment = comment;
-            User user = comment.getUser();
 
-            ContentUtil.loadUserAvatar(mUserImg, user.getAvatar());
+            ContentUtil.loadUserAvatar(mUserImg,comment.getAvatar());
 
-            mUserName.setText(user.getUsername());
-            mEvaluateTime.setText(comment.getCreateTime());
-            mEvaluateInfo.setText(comment.getCommentInfo());
+            mUserName.setText(comment.getNickname());
+            mEvaluateTime.setText(comment.getComTime());
+            mEvaluateInfo.setText(comment.getComment());
             ReplyAdapter adapter = new ReplyAdapter(comment.getReplyList());
             mRecyclerView.setAdapter(adapter);
 
-            final String eid = comment.getId();
-            adapter.setOnItemListener(new ReplyAdapter.OnItemListener() {
-                @Override
-                public void onItemClick(View view, Reply reply) {
-                    if (mOnItemListener != null) mOnItemListener.onItemChildClick(view, eid, reply);
-                }
-            });
+//            final String eid = comment.get_id();
+//            adapter.setOnItemListener(new ReplyAdapter.OnItemListener() {
+//                @Override
+//                public void onItemClick(View view, Reply reply) {
+//                    if (mOnItemListener != null) mOnItemListener.onItemChildClick(view, eid, reply);
+//                }
+//            });
         }
+
+        private void getUserAvatar(String username){
+            OkUtil.post()
+                    .url(Api.getUserAvatar)
+                    .addParam("username",username)
+                    .execute(new ResultCallback<Result<String>>() {
+                        @Override
+                        public void onSuccess(Result<String> response) {
+                            String code = response.getCode();
+                            if (!"00000".equals(code)) {
+
+                                avatar ="";
+                            }
+                            avatar=response.getData();
+                        }
+
+                        @Override
+                        public void onError(Call call, Exception e) {
+                            avatar="";
+                        }
+                    });
+
+
+        }
+
+
 
         @Override
         public void onClick(View view) {

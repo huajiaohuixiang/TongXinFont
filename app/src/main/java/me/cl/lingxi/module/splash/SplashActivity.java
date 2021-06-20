@@ -72,7 +72,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 if (isLogin && !tokenNull) {
-                    getUnRead();
+                    goHome(0);
                 } else {
                     goLogin();
                 }

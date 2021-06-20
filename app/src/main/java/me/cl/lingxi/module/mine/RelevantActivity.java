@@ -117,7 +117,7 @@ public class RelevantActivity extends BaseActivity {
         if (isMine) {
             getRelevantList(Api.mineReply);
         } else {
-            getRelevantList(Api.relevant);
+            getRelevantList(Api.getMyComment);
             updateUnread();
         }
     }

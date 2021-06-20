@@ -28,7 +28,7 @@ public class LxApplication extends Application {
         // 公共请求头
         Map<String, String> headers = new HashMap<>(1);
         String token = SPUtil.build().getString(Api.X_APP_TOKEN);
-        headers.put(Api.X_APP_TOKEN, token);
+        headers.put(Api.X_APP_TOKEN, "Bearer "+token);
         // 注册添加公共请求头
         OkUtil.newInstance().init(this)
                 .addCommonHeaders(headers);

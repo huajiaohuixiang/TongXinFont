@@ -20,16 +20,17 @@ public class Api {
     private static String baseUrl = "http://120.79.157.21:8080/lingxi";
     public static String rssUrl = "http://120.79.157.21:8080/lingxi/rss/lingxi";
     private static String myBaseUrl="http://120.79.157.21:5000/api";
+    //
     static {
 
         String flavor = BuildConfig.FLAVOR;
         switch (flavor) {
-            case "alpha":
+            case "local":
                 baseUrl = "http://120.79.157.21:8080/lingxi";
                 rssUrl = "http://120.79.157.21:8080/rss/lingxi-test";
                 break;
-            case "local":
-                baseUrl = "http://127.0.0.1:5000/api";
+            case "alpha":
+                baseUrl = "http://192.168.1.108:65406/api";
                 rssUrl = "http://127.0.0.1:5000/rss/lingxi-test";
                 break;
             case "online":
@@ -65,36 +66,126 @@ public class Api {
     public static String pageFeed = myBaseUrl + "/Post/getAllUserPostPage";
 
     /**
+     * 获取我的动态
+     */
+    public static String myPostList = myBaseUrl + "/Post/getUserPost";
+
+    /**
+     * 获取我喜欢的帖子
+     */
+    public static String myLikePostList = myBaseUrl + "/Post/GetUserLike";
+    /**
+     * 获取我的评论
+     */
+    public static String myLikeComment = myBaseUrl + "/Post/getUserComment";
+
+    /**
      * 动态评论列表 baseUrl + "/feed/comment/page"
      */
     public static String pageComment = myBaseUrl+"/Comment/getPostComment";
 
+    /**
+     * 查看动态
+     */
+    public static String viewFeed = myBaseUrl + "/Post/addView";
 
+    /**
+     * 新增动态操作,如点赞
+     */
+    public static String saveAction = myBaseUrl + "/Post/UserAddLike";
+
+    /**
+     * 移除动态操作,如取消赞
+     */
+
+    public static String UnsaveAction = myBaseUrl + "/Post/UserUnLike";
 
     /**
      * 发布动态
      */
-    public static String saveFeed = baseUrl + "/feed/save";
+    public static String saveFeed = myBaseUrl + "/Post/CreatePost";
+
     /**
-     * 查看动态
+     * 上传动态图片
      */
-    public static String viewFeed = baseUrl + "/feed/view";
+    public static String uploadFeedImage = myBaseUrl + "/Resource/uploadImage";
+
+    /**
+     * 上传用户图片
+     */
+    public static String uploadUserImage = myBaseUrl + "/Resource/uploadAvatar";
+
+    /**
+     * 获取用户头像链接
+     */
+    public static String getUserAvatar = myBaseUrl + "/UserAdmin/getUserAvatar";
+    /**
+     * 更新用户头像
+     */
+    public static String updateUserAvatar = myBaseUrl + "/UserAdmin/UpdateUserAvatar";
+    /**
+     * 新增动态评论
+     */
+    public static String saveComment = myBaseUrl + "/Comment/Create";
 
 
+    /**
+     * 与我相关
+     */
+    public static String getMyComment = myBaseUrl + "/Comment/getUserComment";
+
+
+
+    /**
+     * 是否关注
+     */
+    public static String isFollow = myBaseUrl + "/UserFollow/isFollow";
+
+
+
+    /**
+     * 关注
+     */
+    public static String Follow = myBaseUrl + "/UserFollow/Follow";
+
+    /**
+     * 取消关注
+     */
+    public static String unFollow = myBaseUrl + "/UserFollow/UnFollow";
+
+
+    /**
+     * 获取最新app版本
+     */
+    public static String latestVersion = myBaseUrl + "/Version/Latest";
+
+    /**
+     * 获取最新app
+     */
+    public static String latestApp = "http://120.79.157.21" + "/app/lastest.apk";
 
     /**
      * 重置密码
      */
-    public static String resetPassword = baseUrl + "/user/reset";
-    /**
-     * 更新用户信息
-     */
-    public static String updateUser = baseUrl + "/user/update";
+    public static String resetPassword = myBaseUrl + "/UserAdmin/ResetPass";
 
     /**
      * 精准查询用户信息
      */
     public static String searchUser = baseUrl + "/user/search";
+
+    /**
+     * 动态删除
+     */
+    public static String removeFeed = baseUrl + "/feed/remove";
+
+
+    /**
+     * 更新用户信息
+     */
+    public static String updateUser = baseUrl + "/user/update";
+
+
     /**
      * 查询用户信息
      */
@@ -105,38 +196,13 @@ public class Api {
     public static String listRcUser = baseUrl + "/user/rc/list";
 
     /**
-     * 与我相关
-     */
-    public static String relevant = baseUrl + "/feed/relevant";
-    /**
      * 我的评论
      */
     public static String mineReply = baseUrl + "/feed/mine/reply";
-    /**
-     * 新增动态操作,如点赞
-     */
-    public static String saveAction = baseUrl + "/feed/action/save";
-    /**
-     * 移除动态操作,如取消赞
-     */
-    public static String removeAction = baseUrl + "/feed/action/remove";
 
-    /**
-     * 新增动态评论
-     */
-    public static String saveComment = baseUrl + "/feed/comment/save";
-    /**
-     * 获取最新app版本
-     */
-    public static String latestVersion = baseUrl + "/app/version/latest";
-    /**
-     * 上传用户图片
-     */
-    public static String uploadUserImage = baseUrl + "/rss/upload/user/image";
-    /**
-     * 上传动态图片
-     */
-    public static String uploadFeedImage = baseUrl + "/rss/upload/feed/image";
+
+
+
     /**
      * 未读条数
      */
@@ -153,10 +219,7 @@ public class Api {
      * 未来日记
      */
     public static String pageFuture = baseUrl + "/future/page";
-    /**
-     * 动态删除
-     */
-    public static String removeFeed = baseUrl + "/feed/remove";
+
     /**
      * 话题查询
      */

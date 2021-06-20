@@ -15,7 +15,9 @@ public class Constants {
     public static final String REPLY_TYPE = "reply_type";
     public static final String REPLY_MY = "reply_my";
     public static final String REPLY_RELEVANT = "reply_relevant";
-
+    public static final String REPLY_My_Like= "reply_mylike";
+    public static final String REPLY_My_Comment= "reply_mycomment";
+    public static final String REPLY_My_Post= "reply_mypost";
     // 本地缓存key
     public static final String SP_USER_ID = "user_id";
     public static final String SP_USER_NAME = "user_name";

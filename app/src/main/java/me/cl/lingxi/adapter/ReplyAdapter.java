@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.cl.lingxi.common.util.Utils;
@@ -32,7 +33,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
     }
 
     public ReplyAdapter(List<Reply> list) {
-        this.mList = list;
+        this.mList=new ArrayList<>();
+//        this.mList = list;
     }
 
     @NonNull

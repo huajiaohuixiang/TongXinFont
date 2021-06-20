@@ -20,10 +20,12 @@ public class UserInfo implements Serializable {
     private String avatar;
     private String imToken;
     private String nickname;
-
+    private String following;
+    private String followed;
     private String loginTime;
-    private String createTime;
-    private String updateTime;
+    private String createdTime;
+    private String stu_id;
+    private String updatedTime;
 
     public String getId() {
         return id;
@@ -106,18 +108,58 @@ public class UserInfo implements Serializable {
     }
 
     public String getCreateTime() {
-        return createTime;
+        return createdTime;
     }
 
     public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+        this.createdTime = createTime;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
+    public String getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(String following) {
+        this.following = following;
+    }
+
+    public String getFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(String followed) {
+        this.followed = followed;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getStu_id() {
+        return stu_id;
+    }
+
+    public void setStu_id(String stu_id) {
+        this.stu_id = stu_id;
     }
 }

@@ -33,7 +33,10 @@ import me.cl.lingxi.databinding.MineFragmentBinding;
 import me.cl.lingxi.dialog.LogoutDialog;
 import me.cl.lingxi.entity.UserInfo;
 import me.cl.lingxi.module.member.LoginActivity;
+import me.cl.lingxi.module.mine.LikeFragmentActivity;
+import me.cl.lingxi.module.mine.MyCommentActivity;
 import me.cl.lingxi.module.mine.PersonalInfoActivity;
+import me.cl.lingxi.module.mine.PostFragmentActivity;
 import me.cl.lingxi.module.mine.RelevantActivity;
 import me.cl.lingxi.module.setting.AboutActivity;
 import me.cl.lingxi.module.setting.SettingsActivity;
@@ -50,7 +53,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     private ImageView mUserImg;
     private TextView mUserName;
     private TextView mMineRelevant;
-
+    private  TextView mStuID;
     private String mUserId;
     private OperateBroadcastReceiver receiver;
 
@@ -65,20 +68,24 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     private void init() {
         mToolbar = mFragmentBinding.includeToolbar.toolbar;
         mUserImg = mFragmentBinding.userImg;
-        mUserName = mFragmentBinding.userName;
+        mUserName = mFragmentBinding.userNickname;
         mMineRelevant = mFragmentBinding.actionRelevant;
-
+        mStuID=mFragmentBinding.userStuId;
         ToolbarUtil.init(mToolbar, getActivity())
                 .setTitle(R.string.nav_mine)
                 .setTitleCenter()
                 .build();
 
         mFragmentBinding.userBody.setOnClickListener(this);
+        //我的收藏
         mFragmentBinding.actionReply.setOnClickListener(this);
+        //我的评论
         mFragmentBinding.actionRelevant.setOnClickListener(this);
         mFragmentBinding.actionSetting.setOnClickListener(this);
         mFragmentBinding.actionAbout.setOnClickListener(this);
         mFragmentBinding.actionSignOut.setOnClickListener(this);
+        //我的帖子
+        mFragmentBinding.actionMypost.setOnClickListener(this);
 
         mUserId = SPUtil.build().getString(Constants.SP_USER_ID);
         // 获取用户信息
@@ -127,13 +134,15 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void initUser(UserInfo userInfo) {
-        String username = getString(R.string.app_name);
+        String usernickname = "默认用户";
         String avatar = "";
         if (userInfo != null) {
-            username = userInfo.getUsername();
+            usernickname = userInfo.getNickname();
             avatar = userInfo.getAvatar();
         }
-        mUserName.setText(username);
+        SPUtil.build().putString("savenickname", userInfo.getNickname());
+        mStuID.setText(userInfo.getStu_id());
+        mUserName.setText(usernickname);
         ContentUtil.loadUserAvatar(mUserImg, avatar);
     }
 
@@ -160,10 +169,15 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 gotoPersonal();
                 break;
             case R.id.action_reply:
-                gotoRelevant(Constants.REPLY_MY);
+                //我的收藏
+                gotoMyLike(Constants.REPLY_MY);
                 break;
             case R.id.action_relevant:
-                gotoRelevant(Constants.REPLY_RELEVANT);
+                //我的评论
+                gotoRelevant();
+                break;
+            case R.id.action_mypost:
+                gotoMyPost(Constants.REPLY_My_Post);
                 break;
             case R.id.action_setting:
                 gotoSettings();
@@ -230,12 +244,23 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     }
 
     // 前往与我相关
-    private void gotoRelevant(String type) {
-        Intent goRelevant = new Intent(getActivity(), RelevantActivity.class);
-        goRelevant.putExtra(Constants.REPLY_TYPE, type);
+    private void gotoRelevant() {
+        Intent goRelevant = new Intent(getActivity(), MyCommentActivity.class);
+
         startActivity(goRelevant);
     }
-
+    // 前往我的收藏
+    private void gotoMyLike(String type) {
+        Intent goMyLike = new Intent(getActivity(), LikeFragmentActivity.class);
+        goMyLike.putExtra(Constants.REPLY_TYPE, type);
+        startActivity(goMyLike);
+    }
+    // 前往我的帖子
+    private void gotoMyPost(String type) {
+        Intent goMyPost = new Intent(getActivity(), PostFragmentActivity.class);
+        goMyPost.putExtra(Constants.REPLY_TYPE, type);
+        startActivity(goMyPost);
+    }
     // 前往登录
     private void gotoLogin() {
         MainActivity activity = (MainActivity) getActivity();
