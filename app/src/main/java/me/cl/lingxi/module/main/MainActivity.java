@@ -35,8 +35,6 @@ import me.cl.lingxi.common.util.SPUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.databinding.IncludeBottomNavigationBinding;
 import me.cl.lingxi.databinding.MianActivityBinding;
-import me.cl.lingxi.entity.AppVersion;
-import me.cl.lingxi.module.setting.AboutActivity;
 import okhttp3.Call;
 
 public class MainActivity extends BaseActivity {

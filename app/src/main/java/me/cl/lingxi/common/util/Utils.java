@@ -27,7 +27,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.cl.library.util.ColorPhrase;
-import me.cl.lingxi.entity.Like;
 
 /**
  * 工具类

@@ -78,19 +78,20 @@ public class LogoutDialog extends DialogFragment implements View.OnClickListener
             content = "你走了就不要再回来，哼！(｀へ´)";
             certain = "走就走！（(￣_,￣ )）";
             cancel = "额！（(⊙﹏⊙)，你停下了脚步）";
-        } else if (x < 60) {
+        } else  {
             content = "你真的要走么 ╥﹏╥...";
             certain = "(ノへ￣、) 默默离开";
             cancel = "(⊙3⊙) 留下";
-        } else if (x < 80) {
-            content = "落花有意流水无情！";
-            certain = "便做春江都是泪，流不尽，许多愁!(⊙﹏⊙)";
-            cancel = "花随水走,水载花流~~o(>_<)o ~~";
-        } else if (x < 100) {
-            content = "慢慢阳关路，劝君更进一杯酒";
-            certain = "举杯邀明月，对影成三人";
-            cancel = "不醉不归!";
         }
+//        } else if (x < 80) {
+//            content = "落花有意流水无情！";
+//            certain = "便做春江都是泪，流不尽，许多愁!(⊙﹏⊙)";
+//            cancel = "花随水走,水载花流~~o(>_<)o ~~";
+//        } else if (x < 100) {
+//            content = "慢慢阳关路，劝君更进一杯酒";
+//            certain = "举杯邀明月，对影成三人";
+//            cancel = "不醉不归!";
+//        }
         promptInfo.setText(content);
         promptOk.setText(certain);
         promptCancel.setText(cancel);

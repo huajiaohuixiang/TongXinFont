@@ -37,7 +37,6 @@ import me.cl.lingxi.module.mine.LikeFragmentActivity;
 import me.cl.lingxi.module.mine.MyCommentActivity;
 import me.cl.lingxi.module.mine.PersonalInfoActivity;
 import me.cl.lingxi.module.mine.PostFragmentActivity;
-import me.cl.lingxi.module.mine.RelevantActivity;
 import me.cl.lingxi.module.setting.AboutActivity;
 import me.cl.lingxi.module.setting.SettingsActivity;
 import okhttp3.Call;

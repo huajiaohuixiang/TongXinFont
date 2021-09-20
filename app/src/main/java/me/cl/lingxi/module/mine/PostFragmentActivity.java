@@ -1,9 +1,7 @@
 package me.cl.lingxi.module.mine;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
@@ -17,26 +15,19 @@ import java.util.List;
 import me.cl.library.base.BaseActivity;
 import me.cl.library.loadmore.LoadMoreAdapter;
 import me.cl.library.loadmore.OnLoadMoreListener;
-import me.cl.library.photo.PhotoBrowser;
 import me.cl.library.util.ToolbarUtil;
 import me.cl.library.view.LoadingDialog;
-import me.cl.library.view.MoeToast;
 import me.cl.lingxi.R;
 import me.cl.lingxi.adapter.FeedAdapter;
-import me.cl.lingxi.adapter.RelevantAdapter;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.SPUtil;
-import me.cl.lingxi.databinding.MyLikesBinding;
 import me.cl.lingxi.databinding.MyPostsBinding;
-import me.cl.lingxi.databinding.RelevantActivityBinding;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.PageInfo;
-import me.cl.lingxi.entity.Relevant;
-import me.cl.lingxi.module.member.UserActivity;
 import okhttp3.Call;
 
 public class PostFragmentActivity extends BaseActivity  {

@@ -13,18 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import me.cl.lingxi.common.config.Api;
-import me.cl.lingxi.common.okhttp.OkUtil;
-import me.cl.lingxi.common.okhttp.ResultCallback;
-import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.util.ContentUtil;
-import me.cl.lingxi.common.util.DateUtil;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.databinding.MyCommentItemBinding;
 import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.CommentPost;
 import me.cl.lingxi.entity.Feed;
-import okhttp3.Call;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyCommentViewHolder> {
     private List<CommentPost> mList;

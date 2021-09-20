@@ -20,7 +20,6 @@ import me.cl.lingxi.adapter.FeedAdapter;
 import me.cl.lingxi.adapter.FeedPhotoAdapter;
 import me.cl.lingxi.common.config.Constants;
 import me.cl.lingxi.common.glide.GlideApp;
-import me.cl.lingxi.entity.Like;
 
 /**
  * @author : happyc

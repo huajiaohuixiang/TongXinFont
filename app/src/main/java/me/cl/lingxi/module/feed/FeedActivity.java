@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import me.cl.library.base.BaseActivity;
 import me.cl.library.photo.PhotoBrowser;

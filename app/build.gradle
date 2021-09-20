@@ -30,22 +30,22 @@ android {
         alpha {
             applicationId "me.cl.lingxi.alpha"
             manifestPlaceholders = [
-                    'APP_ID'  : "me.cl.lingxi.alpha",
+                    'APP_ID'  : "tongxin",
                     'APP_NAME': "@string/app_name_alpha"
             ]
         }
         local {
             applicationId "me.cl.lingxi.local"
             manifestPlaceholders = [
-                    'APP_ID'  : "me.cl.lingxi.local",
+                    'APP_ID'  : "tongxin",
                     'APP_NAME': "@string/app_name_local"
             ]
         }
         online {
             applicationId "me.cl.lingxi"
             manifestPlaceholders = [
-                    'APP_ID'  : "me.cl.lingxi",
-                    'APP_NAME': "@string/app_name"
+                    'APP_ID'  : "tongxin",
+                    'APP_NAME': "同心云社区版"
             ]
         }
     }

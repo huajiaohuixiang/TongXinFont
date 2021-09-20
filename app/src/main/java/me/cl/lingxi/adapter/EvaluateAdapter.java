@@ -1,6 +1,5 @@
 package me.cl.lingxi.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import me.cl.lingxi.common.util.ContentUtil;
 import me.cl.lingxi.databinding.FeedEvaluateRecycleItemBinding;
 import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.Reply;
-import me.cl.lingxi.entity.User;
 import okhttp3.Call;
 
 /**

@@ -24,7 +24,6 @@ import me.cl.lingxi.entity.Comment;
 import me.cl.lingxi.entity.Feed;
 import me.cl.lingxi.entity.Relevant;
 import me.cl.lingxi.entity.Reply;
-import me.cl.lingxi.entity.User;
 import okhttp3.Call;
 
 /**

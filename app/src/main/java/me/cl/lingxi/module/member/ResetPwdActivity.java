@@ -16,7 +16,6 @@ import me.cl.lingxi.common.okhttp.OkUtil;
 import me.cl.lingxi.common.okhttp.ResultCallback;
 import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.databinding.ResetpwdActivityBinding;
-import me.cl.lingxi.entity.UserInfo;
 import okhttp3.Call;
 
 /**

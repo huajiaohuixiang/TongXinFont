@@ -13,7 +13,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import me.cl.library.base.BaseActivity;
 import me.cl.library.util.ToolbarUtil;
-import me.cl.library.view.MoeToast;
 import me.cl.lingxi.R;
 import me.cl.lingxi.common.config.Api;
 import me.cl.lingxi.common.okhttp.OkUtil;
@@ -22,7 +21,6 @@ import me.cl.lingxi.common.result.Result;
 import me.cl.lingxi.common.result.ResultConstant;
 import me.cl.lingxi.common.util.Utils;
 import me.cl.lingxi.databinding.AboutActivityBinding;
-import me.cl.lingxi.entity.AppVersion;
 import me.cl.lingxi.module.webview.WebActivity;
 import okhttp3.Call;
 

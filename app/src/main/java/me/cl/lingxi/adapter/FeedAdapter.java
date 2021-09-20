@@ -16,14 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.cl.lingxi.common.util.ContentUtil;
-import me.cl.lingxi.common.util.DateUtil;
 import me.cl.lingxi.common.util.FeedContentUtil;
 import me.cl.lingxi.databinding.FeedActionIncludeBinding;
 import me.cl.lingxi.databinding.FeedDetailRecycleItemBinding;
 import me.cl.lingxi.databinding.FeedInfoIncludeBinding;
 import me.cl.lingxi.databinding.FeedLikeIncludeBinding;
 import me.cl.lingxi.entity.Feed;
-import me.cl.lingxi.entity.User;
 
 /**
  * Feed Adapter

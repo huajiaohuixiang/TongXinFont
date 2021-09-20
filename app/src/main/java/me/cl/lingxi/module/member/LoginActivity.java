@@ -9,9 +9,7 @@ import android.view.View;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 import me.cl.library.base.BaseActivity;
 import me.cl.library.util.ToolbarUtil;
